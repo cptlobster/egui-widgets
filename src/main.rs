@@ -1,5 +1,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")] // hide console window on Windows in release
 
+mod toolbar;
+
 use eframe::egui;
 
 fn main() -> Result<(), eframe::Error> {
@@ -34,9 +36,16 @@ impl Default for MyApp {
     }
 }
 
+fn print_on_click() {
+    print!("e");
+}
+
 impl eframe::App for MyApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
+            let mut tools: Vec<toolbar::Tool> = Vec::new();
+            tools.append(toolbar::Tool{ name: "Button 1", callback: print_on_click });
+            toolbar::toolbar(ui);
             ui.heading("My egui Application");
             ui.horizontal(|ui| {
                 let name_label = ui.label("Your name: ");
